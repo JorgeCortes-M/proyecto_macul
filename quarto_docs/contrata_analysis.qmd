@@ -1,0 +1,8 @@
+---
+title: "Contrata_macul"
+author: "Jorge Cortés-Miranda"
+format: html
+editor: visual
+---
+
+## Limpieza de datos
