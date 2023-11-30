@@ -5,4 +5,59 @@ format: html
 editor: visual
 ---
 
-## Limpieza de datos
+## Data cleaning
+
+The data obtained from [Portal de transparencia](https://www.portaltransparencia.cl/PortalPdT/directorio-de-organismos-regulados/?org=MU161#) from Chile, has a lot of different problems to solve before the data analysis, first we will look at the contrata payment information of the Macul munnicipality between the years 2013 and 2022.
+
+```{python}
+import pandas as pd
+
+contrata_2013_2022 = pd.read_csv("../data/contrata_2013_2022.csv")
+
+contrata_2013_2022.info()
+```
+
+We have 21 fields in the dataframe, but the names of the fields are very long or difficult to work with, so we will rename those.
+
+```{python}
+contrata_2013_2022.rename(
+  columns = {
+    "Año"                                      : "año",
+    "mes"                                      : "mes",
+    "Nombre.completo"                          : "nombre",
+    "Cargo.o.función"                          : "cargo_funcion",
+    "Grado.EUS.o.jornada"                      : "grado_jornada",
+    "Calificación.profesional.o.formación"     : "calif_form",
+    "Región"                                   : "region",
+    "Asignaciones.especiales"                  : "as_espec",
+    "Remuneración.bruta.mensualizada"          : "r_bruta_mens",
+    "Remuneración.líquida.mensualizada"        : "r_liquida_mens",
+    "Remuneraciones.adicionales"               : "r_adic",
+    "Remuneración.Bonos.incentivos"            : "r_bonos_inc",
+    "Derecho.a.horas.extraordinarias"          : "der_hr_ext",
+    "Montos.y.horas.extraordinarias.diurnas"   : "mont_hr_ext_diur",
+    "Montos.y.horas.extraordinarias.nocturnas" : "mont_hr_ext_noct",
+    "Montos.y.horas.extraordinarias.festivas"  : "mont_hr_ext_fest",
+    "Fecha.de.inicio.dd.mm.aa"                 : "fecha_in",
+    "Fecha.de.término.dd.mm.aa"                : "fecha_ter",
+    "Viáticos"                                 : "viaticos",
+    "Observaciones"                            : "observaciones"
+  }, inplace = True
+)
+
+contrata_2013_2022
+```
+
+Now we have a dataframe more easy to work with, but we still have some issues about the data, lets look at the "mont_hr_ext_diur" column.
+
+```{python}
+contrata_2013_2022['mont_hr_ext_diur']
+```
+
+At first sight we can note that there is a combination of payment and hours associated with that payment, this problem is presented for all the columns that are related with extra hours, so we need to follow some steps in order to split clean those columns.
+
+```{python}
+contrata_2013_2022[["monto_hr_ext_diur","hr_ext_diur"]] = contrata_2013_2022.mont_hr_ext_diur.str.split(":", expand=True)
+
+contrata_2013_2022["monto_hr_ext_diur"]
+```
