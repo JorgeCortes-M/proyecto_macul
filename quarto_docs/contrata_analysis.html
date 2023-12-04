@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jorge Cortés-Miranda">
+
+<title>Contrata_macul</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="contrata_analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="contrata_analysis_files/libs/quarto-html/quarto.js"></script>
+<script src="contrata_analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="contrata_analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="contrata_analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="contrata_analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="contrata_analysis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="contrata_analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="contrata_analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="contrata_analysis_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Contrata_macul</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jorge Cortés-Miranda </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data cleaning</h2>
+<p>The data obtained from <a href="https://www.portaltransparencia.cl/PortalPdT/directorio-de-organismos-regulados/?org=MU161#">Portal de transparencia</a> from Chile, has a lot of different problems to solve before the data analysis, first we will look at the contrata payment information of the Macul munnicipality between the years 2013 and 2022.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022 <span class="op">=</span> pd.read_csv(<span class="st">"../data/contrata_2013_2022.csv"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 9963 entries, 0 to 9962
+Data columns (total 21 columns):
+ #   Column                                    Non-Null Count  Dtype 
+---  ------                                    --------------  ----- 
+ 0   Año                                       9963 non-null   int64 
+ 1   Mes                                       9963 non-null   object
+ 2   Estamento                                 9963 non-null   object
+ 3   Nombre.completo                           9963 non-null   object
+ 4   Cargo.o.función                           9963 non-null   object
+ 5   Grado.EUS.o.jornada                       9963 non-null   int64 
+ 6   Calificación.profesional.o.formación      9963 non-null   object
+ 7   Región                                    9963 non-null   object
+ 8   Asignaciones.especiales                   9963 non-null   object
+ 9   Remuneración.bruta.mensualizada           9963 non-null   object
+ 10  Remuneración.líquida.mensualizada         9963 non-null   object
+ 11  Remuneraciones.adicionales                9963 non-null   object
+ 12  Remuneración.Bonos.incentivos             9963 non-null   object
+ 13  Derecho.a.horas.extraordinarias           9963 non-null   object
+ 14  Montos.y.horas.extraordinarias.diurnas    9963 non-null   object
+ 15  Montos.y.horas.extraordinarias.nocturnas  9963 non-null   object
+ 16  Montos.y.horas.extraordinarias.festivas   9963 non-null   object
+ 17  Fecha.de.inicio.dd.mm.aa                  9963 non-null   object
+ 18  Fecha.de.término.dd.mm.aa                 9963 non-null   object
+ 19  Viáticos                                  9963 non-null   object
+ 20  Observaciones                             9567 non-null   object
+dtypes: int64(2), object(19)
+memory usage: 1.6+ MB</code></pre>
+</div>
+</div>
+<p>We have 21 fields in the dataframe, but the names of the fields are very long or difficult to work with, so we will rename those.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022.rename(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  columns <span class="op">=</span> {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Año"</span>                                      : <span class="st">"año"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mes"</span>                                      : <span class="st">"mes"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Nombre.completo"</span>                          : <span class="st">"nombre"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cargo.o.función"</span>                          : <span class="st">"cargo_funcion"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Grado.EUS.o.jornada"</span>                      : <span class="st">"grado_jornada"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Calificación.profesional.o.formación"</span>     : <span class="st">"calif_form"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Región"</span>                                   : <span class="st">"region"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Asignaciones.especiales"</span>                  : <span class="st">"as_espec"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Remuneración.bruta.mensualizada"</span>          : <span class="st">"r_bruta_mens"</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Remuneración.líquida.mensualizada"</span>        : <span class="st">"r_liquida_mens"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Remuneraciones.adicionales"</span>               : <span class="st">"r_adic"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Remuneración.Bonos.incentivos"</span>            : <span class="st">"r_bonos_inc"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Derecho.a.horas.extraordinarias"</span>          : <span class="st">"der_hr_ext"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Montos.y.horas.extraordinarias.diurnas"</span>   : <span class="st">"mont_hr_ext_diur"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Montos.y.horas.extraordinarias.nocturnas"</span> : <span class="st">"mont_hr_ext_noct"</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Montos.y.horas.extraordinarias.festivas"</span>  : <span class="st">"mont_hr_ext_fest"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fecha.de.inicio.dd.mm.aa"</span>                 : <span class="st">"fecha_in"</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fecha.de.término.dd.mm.aa"</span>                : <span class="st">"fecha_ter"</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Viáticos"</span>                                 : <span class="st">"viaticos"</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Observaciones"</span>                            : <span class="st">"observaciones"</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  }, inplace <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">año</th>
+<th data-quarto-table-cell-role="th">Mes</th>
+<th data-quarto-table-cell-role="th">Estamento</th>
+<th data-quarto-table-cell-role="th">nombre</th>
+<th data-quarto-table-cell-role="th">cargo_funcion</th>
+<th data-quarto-table-cell-role="th">grado_jornada</th>
+<th data-quarto-table-cell-role="th">calif_form</th>
+<th data-quarto-table-cell-role="th">region</th>
+<th data-quarto-table-cell-role="th">as_espec</th>
+<th data-quarto-table-cell-role="th">r_bruta_mens</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">r_adic</th>
+<th data-quarto-table-cell-role="th">r_bonos_inc</th>
+<th data-quarto-table-cell-role="th">der_hr_ext</th>
+<th data-quarto-table-cell-role="th">mont_hr_ext_diur</th>
+<th data-quarto-table-cell-role="th">mont_hr_ext_noct</th>
+<th data-quarto-table-cell-role="th">mont_hr_ext_fest</th>
+<th data-quarto-table-cell-role="th">fecha_in</th>
+<th data-quarto-table-cell-role="th">fecha_ter</th>
+<th data-quarto-table-cell-role="th">viaticos</th>
+<th data-quarto-table-cell-role="th">observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2013</td>
+<td>Enero</td>
+<td>Administrativo</td>
+<td>ACEVEDO BAHAMONDES, ISRAEL ANDRES</td>
+<td>ADMINISTRATIVO TRANSITO</td>
+<td>12</td>
+<td>ESTUDIOS UNIVERSITARIOS INCOMPLETOS</td>
+<td>Región Metropolitana de Santiago</td>
+<td>-1</td>
+<td>$653.697</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>No</td>
+<td>2.935,00 : 1,00 hrs</td>
+<td>17.610,00 : 5,00 hrs</td>
+<td>No tiene</td>
+<td>01-01-2013</td>
+<td>30-04-2013</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2013</td>
+<td>Enero</td>
+<td>Auxiliar</td>
+<td>ACEVEDO LIZAMA, MIGUEL ANGEL</td>
+<td>AUXILIAR ASEO DAO</td>
+<td>15</td>
+<td>EGRESADO ENSEÑANZA MEDIA</td>
+<td>Región Metropolitana de Santiago</td>
+<td>-2</td>
+<td>$439.332</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>No</td>
+<td>16.973,00 : 9,00 hrs</td>
+<td>47.524,00 : 21,00 hrs</td>
+<td>No tiene</td>
+<td>01-01-2013</td>
+<td>30-04-2013</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2013</td>
+<td>Enero</td>
+<td>Administrativo</td>
+<td>ACUÑA JARA, CLARA BEATRIZ</td>
+<td>ADMINISTRATIVO ORG. COMUNITARIAS DIDECO</td>
+<td>16</td>
+<td>AGENTE COMERCIAL</td>
+<td>Región Metropolitana de Santiago</td>
+<td>-2</td>
+<td>$424.534</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>No</td>
+<td>71.079,00 : 40,00 hrs</td>
+<td>63.971,00 : 30,00 hrs</td>
+<td>No tiene</td>
+<td>01-01-2013</td>
+<td>30-04-2013</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2013</td>
+<td>Enero</td>
+<td>Técnico</td>
+<td>AGUILERA PEÑALOZA, MANUEL</td>
+<td>TECNICO VETERINARIO MEDIO AMBIENTE DIDECO</td>
+<td>10</td>
+<td>MEDICO VETERINARIO</td>
+<td>Región Metropolitana de Santiago</td>
+<td>-2</td>
+<td>$834.066</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>No</td>
+<td>33.894,00 : 8,00 hrs</td>
+<td>116.933,00 : 23,00 hrs</td>
+<td>No tiene</td>
+<td>01-01-2013</td>
+<td>30-04-2013</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2013</td>
+<td>Enero</td>
+<td>Profesional</td>
+<td>ALBORNOZ MEZA, ROBERTO RODRIGO</td>
+<td>PROFESIONAL DIRECCION DE ADMINISTRACION Y FINA...</td>
+<td>9</td>
+<td>ADMINISTRADOR PUBLICO</td>
+<td>Región Metropolitana de Santiago</td>
+<td>-1</td>
+<td>$1.004.650</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>No</td>
+<td>179.707,00 : 35,00 hrs</td>
+<td>166.357,00 : 27,00 hrs</td>
+<td>No tiene</td>
+<td>01-01-2013</td>
+<td>30-04-2013</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9958</td>
+<td>2022</td>
+<td>Diciembre</td>
+<td>Administrativo</td>
+<td>VILLALON FUENTES, PABLO SEBASTIAN</td>
+<td>INSPECTOR SEGURIDAD HUMANA</td>
+<td>14</td>
+<td>LICENCIA EDUCACION MEDIA</td>
+<td>Región Metropolitana de Santiago</td>
+<td>(151)(150)(149)(78)(76)(75)(66)(44)(33)(32)(13...</td>
+<td>$1.791.788</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>Sí</td>
+<td>60.640,00 : 19,00 hrs</td>
+<td>153.196,00 : 40,00 hrs</td>
+<td>No tiene</td>
+<td>01-05-2020</td>
+<td>31-12-2022</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9959</td>
+<td>2022</td>
+<td>Diciembre</td>
+<td>Profesional</td>
+<td>VIVANCO ASTORGA, PAUL FERNANDO</td>
+<td>PROFESIONAL APOYO DIDECO</td>
+<td>8</td>
+<td>PSICOLOGO</td>
+<td>Región Metropolitana de Santiago</td>
+<td>(153)(151)(150)(149)(78)(76)(75)(66)(44)(33)(3...</td>
+<td>$4.189.536</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>Sí</td>
+<td>109.368,00 : 12,00 hrs</td>
+<td>No tiene</td>
+<td>No tiene</td>
+<td>01-04-2017</td>
+<td>31-12-2022</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9960</td>
+<td>2022</td>
+<td>Diciembre</td>
+<td>Administrativo</td>
+<td>YAÑEZ DURAN, ISABEL ANDREA</td>
+<td>SECRETARIA DEPTO. SEG. HUMANA</td>
+<td>14</td>
+<td>LICENCIA DE EDUCACION MEDIA</td>
+<td>Región Metropolitana de Santiago</td>
+<td>(151)(150)(149)(78)(76)(75)(66)(44)(33)(32)(13...</td>
+<td>$1.744.931</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>Sí</td>
+<td>79.790,00 : 25,00 hrs</td>
+<td>91.918,00 : 24,00 hrs</td>
+<td>No tiene</td>
+<td>01-06-2014</td>
+<td>31-12-2022</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9961</td>
+<td>2022</td>
+<td>Diciembre</td>
+<td>Técnico</td>
+<td>ZAMBRANO MIRANDA, INGRID SUSANA</td>
+<td>AUDITORA REVISORA CONTROL</td>
+<td>10</td>
+<td>TECNICO UNIVERSITARIO GESTION ADMINISTRATIVA</td>
+<td>Región Metropolitana de Santiago</td>
+<td>(151)(150)(149)(78)(76)(75)(66)(44)(33)(32)(07)</td>
+<td>$2.716.969</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>No</td>
+<td>No tiene</td>
+<td>No tiene</td>
+<td>No tiene</td>
+<td>20-09-2011</td>
+<td>31-12-2022</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9962</td>
+<td>2022</td>
+<td>Diciembre</td>
+<td>Auxiliar</td>
+<td>ZURITA SILVA, MARCO ANTONIO</td>
+<td>AUXILIAR DE SERVICIO DMAOS</td>
+<td>15</td>
+<td>LICENCIA EDUCACION MEDIA</td>
+<td>Región Metropolitana de Santiago</td>
+<td>(150)(149)(78)(76)(75)(66)(44)(32)(13)(12)(07)</td>
+<td>$1.448.561</td>
+<td>...</td>
+<td>-</td>
+<td>-</td>
+<td>Sí</td>
+<td>2.828,00 : 1,00 hrs</td>
+<td>81.449,00 : 24,00 hrs</td>
+<td>No tiene</td>
+<td>13-06-2022</td>
+<td>31-12-2022</td>
+<td>No informa</td>
+<td>Sin observaciones</td>
+</tr>
+</tbody>
+</table>
+
+<p>9963 rows × 21 columns</p>
+</div>
+</div>
+</div>
+<p>Now we have a dataframe more easy to work with, but we still have some issues about the data, lets look at the “mont_hr_ext_diur” column.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022[<span class="st">'mont_hr_ext_diur'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>0          2.935,00 : 1,00 hrs
+1         16.973,00 : 9,00 hrs
+2        71.079,00 : 40,00 hrs
+3         33.894,00 : 8,00 hrs
+4       179.707,00 : 35,00 hrs
+                 ...          
+9958     60.640,00 : 19,00 hrs
+9959    109.368,00 : 12,00 hrs
+9960     79.790,00 : 25,00 hrs
+9961                  No tiene
+9962       2.828,00 : 1,00 hrs
+Name: mont_hr_ext_diur, Length: 9963, dtype: object</code></pre>
+</div>
+</div>
+<p>At first sight we can note that there is a combination of payment and hours associated with that payment, this problem is presented for all the columns that are related with extra hours, so we need to follow some steps in order to split clean those columns.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022[[<span class="st">"monto_hr_ext_diur"</span>,<span class="st">"hr_ext_diur"</span>]] <span class="op">=</span> contrata_2013_2022.mont_hr_ext_diur.<span class="bu">str</span>.split(<span class="st">":"</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022[[<span class="st">"monto_hr_ext_noct"</span>,<span class="st">"hr_ext_noct"</span>]] <span class="op">=</span> contrata_2013_2022.mont_hr_ext_diur.<span class="bu">str</span>.split(<span class="st">":"</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022[[<span class="st">"monto_hr_ext_fest"</span>,<span class="st">"hr_ext_fest"</span>]] <span class="op">=</span> contrata_2013_2022.mont_hr_ext_diur.<span class="bu">str</span>.split(<span class="st">":"</span>, expand<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

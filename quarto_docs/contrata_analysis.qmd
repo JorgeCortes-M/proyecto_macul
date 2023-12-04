@@ -59,5 +59,9 @@ At first sight we can note that there is a combination of payment and hours asso
 ```{python}
 contrata_2013_2022[["monto_hr_ext_diur","hr_ext_diur"]] = contrata_2013_2022.mont_hr_ext_diur.str.split(":", expand=True)
 
-contrata_2013_2022["monto_hr_ext_diur"]
+contrata_2013_2022[["monto_hr_ext_noct","hr_ext_noct"]] = contrata_2013_2022.mont_hr_ext_diur.str.split(":", expand=True)
+
+contrata_2013_2022[["monto_hr_ext_fest","hr_ext_fest"]] = contrata_2013_2022.mont_hr_ext_diur.str.split(":", expand=True)
+
+
 ```
