@@ -59,9 +59,76 @@ At first sight we can note that there is a combination of payment and hours asso
 ```{python}
 contrata_2013_2022[["monto_hr_ext_diur","hr_ext_diur"]] = contrata_2013_2022.mont_hr_ext_diur.str.split(":", expand=True)
 
-contrata_2013_2022[["monto_hr_ext_noct","hr_ext_noct"]] = contrata_2013_2022.mont_hr_ext_diur.str.split(":", expand=True)
+contrata_2013_2022[["monto_hr_ext_noct","hr_ext_noct"]] = contrata_2013_2022.mont_hr_ext_noct.str.split(":", expand=True)
 
-contrata_2013_2022[["monto_hr_ext_fest","hr_ext_fest"]] = contrata_2013_2022.mont_hr_ext_diur.str.split(":", expand=True)
+contrata_2013_2022[["monto_hr_ext_fest","hr_ext_fest"]] = contrata_2013_2022.mont_hr_ext_fest.str.split(":", expand=True)
 
 
+```
+
+Now we have different columns for the salary related to extra hours, and the total of extra hours for each worker at the Macul municipality. But the format of those columns are not numeric, so we need to fix that. First, we will do it for the salary data.
+
+```{python}
+contrata_2013_2022["monto_hr_ext_diur"] = contrata_2013_2022["monto_hr_ext_diur"].replace({"No tiene" : "0",
+          ",00" : ""}, regex = True)
+contrata_2013_2022["monto_hr_ext_noct"] = contrata_2013_2022["monto_hr_ext_noct"].replace({"No tiene" : "0",
+          ",00" : ""}, regex = True)
+contrata_2013_2022["monto_hr_ext_fest"] = contrata_2013_2022["monto_hr_ext_fest"].replace({"No tiene" : "0",
+          ",00" : ""}, regex = True)
+
+
+contrata_2013_2022["monto_hr_ext_diur"] = pd.to_numeric(contrata_2013_2022["monto_hr_ext_diur"])
+contrata_2013_2022["monto_hr_ext_noct"] = pd.to_numeric(contrata_2013_2022["monto_hr_ext_noct"])
+contrata_2013_2022["monto_hr_ext_fest"] = pd.to_numeric(contrata_2013_2022["monto_hr_ext_fest"])
+
+```
+
+Now we can repeat the process for the extra hours data. Looking at the data the index 1503 has a problem related to the format of the data, it has been inverted, so first we need to remove that row.
+
+```{python}
+contrata_2013_2022 = contrata_2013_2022.drop(1503)
+```
+
+Then we can clean the extra hours columns.
+
+```{python}
+# day
+contrata_2013_2022["hr_ext_diur"] = contrata_2013_2022["hr_ext_diur"].replace({"," : "."," hrs" : ""}, regex=True)
+
+
+contrata_2013_2022["hr_ext_diur"] = pd.to_numeric(contrata_2013_2022["hr_ext_diur"])
+
+# night
+contrata_2013_2022["hr_ext_noct"] = contrata_2013_2022["hr_ext_noct"].replace({"," : "."," hrs" : ""}, regex=True)
+
+contrata_2013_2022["hr_ext_noct"] = pd.to_numeric(contrata_2013_2022["hr_ext_noct"])
+
+# hollidays
+contrata_2013_2022["hr_ext_fest"] = contrata_2013_2022["hr_ext_fest"].replace({"," : "."," hrs" : ""}, regex=True)
+
+contrata_2013_2022["hr_ext_fest"] = pd.to_numeric(contrata_2013_2022["hr_ext_fest"])
+
+# Transforming NaN to zero
+
+columns = ['hr_ext_diur', 'hr_ext_noct', 'hr_ext_fest']
+contrata_2013_2022_clean = contrata_2013_2022.fillna({col: 0 for col in columns})
+```
+
+The last step in cleaning process, will be to transform the salary data in a way useful for analysis.
+
+```{python}
+# first look at the salary data
+contrata_2013_2022_clean["r_bruta_mens"]
+contrata_2013_2022_clean["r_liquida_mens"]
+
+# remove the $ sign and transform to numeric
+
+#contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].str[1:]
+
+#contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].replace(".", ",")
+
+
+#contrata_2013_2022_clean["r_bruta_mens"] = pd.to_numeric(contrata_2013_2022_clean["r_bruta_mens"], errors="coerce")
+
+#contrata_2013_2022_clean["r_bruta_mens"]
 ```
