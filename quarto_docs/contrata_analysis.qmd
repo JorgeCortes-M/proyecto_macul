@@ -123,12 +123,26 @@ contrata_2013_2022_clean["r_liquida_mens"]
 
 # remove the $ sign and transform to numeric
 
-#contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].str[1:]
+# need to improve this part
+contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].str.replace({"$" : "", "." : ""}, regex=True)
 
-#contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].replace(".", ",")
+contrata_2013_2022_clean["r_bruta_mens"] = pd.to_numeric(contrata_2013_2022_clean["r_bruta_mens"])
+
+contrata_2013_2022_clean["r_bruta_mens"]
+
+contrata_2013_2022_clean["r_liquida_mens"] = contrata_2013_2022_clean["r_liquida_mens"].str.replace({"$" : "", "." : "", "-" : ""}, regex=True)
 
 
-#contrata_2013_2022_clean["r_bruta_mens"] = pd.to_numeric(contrata_2013_2022_clean["r_bruta_mens"], errors="coerce")
+contrata_2013_2022_clean["r_liquida_mens"] = pd.to_numeric(contrata_2013_2022_clean["r_liquida_mens"])
 
-#contrata_2013_2022_clean["r_bruta_mens"]
+contrata_2013_2022_clean["r_liquida_mens"]
+```
+
+Now the salary data is in chilean pesos and can be analyzed. We will export the clean data in order to use it.
+
+```{python}
+from pathlib import Path  
+filepath = Path('../data/contrata_2013_2022_clean.csv', encoding='utf-8-sig')
+
+contrata_2013_2022_clean.to_csv(filepath)
 ```
