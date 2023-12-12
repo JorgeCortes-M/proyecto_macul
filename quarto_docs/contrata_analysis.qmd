@@ -124,16 +124,21 @@ contrata_2013_2022_clean["r_liquida_mens"]
 # remove the $ sign and transform to numeric
 
 # need to improve this part
-contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].str.replace({"$" : "", "." : ""}, regex=True)
+contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].str.replace("$","",regex=True)
+contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].str.replace(".","",regex=True)
 
 contrata_2013_2022_clean["r_bruta_mens"] = pd.to_numeric(contrata_2013_2022_clean["r_bruta_mens"])
 
 contrata_2013_2022_clean["r_bruta_mens"]
 
-contrata_2013_2022_clean["r_liquida_mens"] = contrata_2013_2022_clean["r_liquida_mens"].str.replace({"$" : "", "." : "", "-" : ""}, regex=True)
+contrata_2013_2022_clean["r_liquida_mens"] = contrata_2013_2022_clean["r_liquida_mens"].str.replace("-", "", regex=True)
 
+contrata_2013_2022_clean["r_liquida_mens"] = contrata_2013_2022_clean["r_liquida_mens"].str.replace(".", "", regex=True)
 
 contrata_2013_2022_clean["r_liquida_mens"] = pd.to_numeric(contrata_2013_2022_clean["r_liquida_mens"])
+
+
+#contrata_2013_2022_clean["r_liquida_mens"] = pd.to_numeric(contrata_2013_2022_clean["r_liquida_mens"])
 
 contrata_2013_2022_clean["r_liquida_mens"]
 ```
@@ -145,4 +150,18 @@ from pathlib import Path
 filepath = Path('../data/contrata_2013_2022_clean.csv', encoding='utf-8-sig')
 
 contrata_2013_2022_clean.to_csv(filepath)
+```
+
+# Salary data analysis
+
+In this dataset we have two fields related to salary `r_bruta_mens` and `r_liquida_mens`, the first one is the salary without discounts, related to health and others, the second one is with those discounts. First we will visualize the salary data distribution.
+
+```{python}
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+sns.displot(contrata_2013_2022_clean, x = "r_bruta_mens", color = "red", hue="año")
+
 ```

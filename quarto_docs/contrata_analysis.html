@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.3.433">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -550,27 +550,59 @@ Name: mont_hr_ext_diur, Length: 9963, dtype: object</code></pre>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># remove the $ sign and transform to numeric</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].str[1:]</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#contrata_2013_2022_clean["r_bruta_mens"] = contrata_2013_2022_clean["r_bruta_mens"].replace(".", ",")</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># need to improve this part</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022_clean[<span class="st">"r_bruta_mens"</span>] <span class="op">=</span> contrata_2013_2022_clean[<span class="st">"r_bruta_mens"</span>].<span class="bu">str</span>.replace(<span class="st">"$"</span>,<span class="st">""</span>,regex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022_clean[<span class="st">"r_bruta_mens"</span>] <span class="op">=</span> contrata_2013_2022_clean[<span class="st">"r_bruta_mens"</span>].<span class="bu">str</span>.replace(<span class="st">"."</span>,<span class="st">""</span>,regex<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#contrata_2013_2022_clean["r_bruta_mens"] = pd.to_numeric(contrata_2013_2022_clean["r_bruta_mens"], errors="coerce")</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#contrata_2013_2022_clean["r_bruta_mens"]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022_clean[<span class="st">"r_bruta_mens"</span>] <span class="op">=</span> pd.to_numeric(contrata_2013_2022_clean[<span class="st">"r_bruta_mens"</span>])</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022_clean[<span class="st">"r_bruta_mens"</span>]</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022_clean[<span class="st">"r_liquida_mens"</span>] <span class="op">=</span> contrata_2013_2022_clean[<span class="st">"r_liquida_mens"</span>].<span class="bu">str</span>.replace(<span class="st">"-"</span>, <span class="st">""</span>, regex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022_clean[<span class="st">"r_liquida_mens"</span>] <span class="op">=</span> contrata_2013_2022_clean[<span class="st">"r_liquida_mens"</span>].<span class="bu">str</span>.replace(<span class="st">"."</span>, <span class="st">""</span>, regex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022_clean[<span class="st">"r_liquida_mens"</span>] <span class="op">=</span> pd.to_numeric(contrata_2013_2022_clean[<span class="st">"r_liquida_mens"</span>])</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#contrata_2013_2022_clean["r_liquida_mens"] = pd.to_numeric(contrata_2013_2022_clean["r_liquida_mens"])</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022_clean[<span class="st">"r_liquida_mens"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>0               -
-1               -
-2               -
-3               -
-4               -
+<pre><code>0             NaN
+1             NaN
+2             NaN
+3             NaN
+4             NaN
           ...    
-9958    1.608.081
-9959    3.416.892
-9960    1.599.769
-9961    2.015.624
-9962    1.315.144
-Name: r_liquida_mens, Length: 9962, dtype: object</code></pre>
+9958    1608081.0
+9959    3416892.0
+9960    1599769.0
+9961    2015624.0
+9962    1315144.0
+Name: r_liquida_mens, Length: 9962, dtype: float64</code></pre>
+</div>
+</div>
+<p>Now the salary data is in chilean pesos and can be analyzed. We will export the clean data in order to use it.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path  </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>filepath <span class="op">=</span> Path(<span class="st">'../data/contrata_2013_2022_clean.csv'</span>, encoding<span class="op">=</span><span class="st">'utf-8-sig'</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>contrata_2013_2022_clean.to_csv(filepath)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="salary-data-analysis" class="level1">
+<h1>Salary data analysis</h1>
+<p>In this dataset we have two fields related to salary <code>r_bruta_mens</code> and <code>r_liquida_mens</code>, the first one is the salary without discounts, related to health and others, the second one is with those discounts. First we will visualize the salary data distribution.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>sns.displot(contrata_2013_2022_clean, x <span class="op">=</span> <span class="st">"r_bruta_mens"</span>, color <span class="op">=</span> <span class="st">"red"</span>, hue<span class="op">=</span><span class="st">"año"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="contrata_analysis_files/figure-html/cell-11-output-1.png" width="560" height="470"></p>
 </div>
 </div>
 </section>
