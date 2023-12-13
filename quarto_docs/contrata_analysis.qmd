@@ -162,6 +162,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-sns.displot(contrata_2013_2022_clean, x = "r_bruta_mens", color = "red", hue="año")
+sns.displot(contrata_2013_2022_clean, x = "r_bruta_mens", color = "red", kind = "kde")
 
 ```
