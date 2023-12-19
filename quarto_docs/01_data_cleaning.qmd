@@ -1,5 +1,5 @@
 ---
-title: "Contrata_macul"
+title: "Data cleaning of hire staff data in Macul municipality"
 author: "Jorge Cortés-Miranda"
 format: html
 editor: visual
@@ -7,7 +7,7 @@ editor: visual
 
 ## Data cleaning
 
-The data obtained from [Portal de transparencia](https://www.portaltransparencia.cl/PortalPdT/directorio-de-organismos-regulados/?org=MU161#) from Chile, has a lot of different problems to solve before the data analysis, first we will look at the contrata payment information of the Macul munnicipality between the years 2013 and 2022.
+The data obtained from [Portal de transparencia](https://www.portaltransparencia.cl/PortalPdT/directorio-de-organismos-regulados/?org=MU161#) from Chile, has a lot of different problems to solve before the data analysis, first we will look at the hire payment information of the Macul municipality between the years 2013 and 2022.
 
 ```{python}
 import pandas as pd
@@ -17,38 +17,7 @@ contrata_2013_2022 = pd.read_csv("../data/contrata_2013_2022.csv")
 contrata_2013_2022.info()
 ```
 
-We have 21 fields in the dataframe, but the names of the fields are very long or difficult to work with, so we will rename those.
-
-```{python}
-contrata_2013_2022.rename(
-  columns = {
-    "Año"                                      : "año",
-    "mes"                                      : "mes",
-    "Nombre.completo"                          : "nombre",
-    "Cargo.o.función"                          : "cargo_funcion",
-    "Grado.EUS.o.jornada"                      : "grado_jornada",
-    "Calificación.profesional.o.formación"     : "calif_form",
-    "Región"                                   : "region",
-    "Asignaciones.especiales"                  : "as_espec",
-    "Remuneración.bruta.mensualizada"          : "r_bruta_mens",
-    "Remuneración.líquida.mensualizada"        : "r_liquida_mens",
-    "Remuneraciones.adicionales"               : "r_adic",
-    "Remuneración.Bonos.incentivos"            : "r_bonos_inc",
-    "Derecho.a.horas.extraordinarias"          : "der_hr_ext",
-    "Montos.y.horas.extraordinarias.diurnas"   : "mont_hr_ext_diur",
-    "Montos.y.horas.extraordinarias.nocturnas" : "mont_hr_ext_noct",
-    "Montos.y.horas.extraordinarias.festivas"  : "mont_hr_ext_fest",
-    "Fecha.de.inicio.dd.mm.aa"                 : "fecha_in",
-    "Fecha.de.término.dd.mm.aa"                : "fecha_ter",
-    "Viáticos"                                 : "viaticos",
-    "Observaciones"                            : "observaciones"
-  }, inplace = True
-)
-
-contrata_2013_2022
-```
-
-Now we have a dataframe more easy to work with, but we still have some issues about the data, lets look at the "mont_hr_ext_diur" column.
+This dataframe consist in 21 fields with different information about contrata in Macul municipality, but we have some issues about the data, lets look at the "mont_hr_ext_diur" column.
 
 ```{python}
 contrata_2013_2022['mont_hr_ext_diur']
@@ -143,25 +112,13 @@ contrata_2013_2022_clean["r_liquida_mens"] = pd.to_numeric(contrata_2013_2022_cl
 contrata_2013_2022_clean["r_liquida_mens"]
 ```
 
-Now the salary data is in chilean pesos and can be analyzed. We will export the clean data in order to use it.
+Now the salary data is in chilean pesos and can be analyzed. We will export the clean data in order to use it in next steps.
 
 ```{python}
 from pathlib import Path  
 filepath = Path('../data/contrata_2013_2022_clean.csv', encoding='utf-8-sig')
 
-contrata_2013_2022_clean.to_csv(filepath)
+contrata_2013_2022_clean.to_csv(filepath, index=False)
 ```
 
-# Salary data analysis
-
-In this dataset we have two fields related to salary `r_bruta_mens` and `r_liquida_mens`, the first one is the salary without discounts, related to health and others, the second one is with those discounts. First we will visualize the salary data distribution.
-
-```{python}
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-
-sns.displot(contrata_2013_2022_clean, x = "r_bruta_mens", color = "red", kind = "kde")
-
-```
+# 
