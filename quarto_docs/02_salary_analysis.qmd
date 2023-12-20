@@ -1,0 +1,51 @@
+---
+title: "Data analysis of salary of hire staff in Macul municipality"
+author: "Jorge Cortés-Miranda"
+format: html
+editor: visual
+---
+
+# Salary data of hire staff in Macul municipality
+
+In a previous step we obtained all the data related to salary of the Macul municipality only for the hired staff. After a cleaning process, we can now work with that data in order to get some insights about the salary of hire staff between 2013 and 2022. First let's load the data.
+
+```{python}
+import pandas as pd
+
+contrata_2013_2022_clean = pd.read_csv("../data/contrata_2013_2022_clean.csv")
+
+contrata_2013_2022_clean.info()
+```
+
+In a first exploratory analysis we could visualize the salary without discounts and his distribution over the time.
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.displot(data=contrata_2013_2022_clean, x='r_bruta_mens', hue='año', kind='kde')
+
+plt.show()
+```
+
+We can obtain some metrics about the data using the following.
+
+```{python}
+contrata_2013_2022_clean['r_bruta_mens'].describe()
+```
+
+The mean of the salary data between 2013 and 2022 is around **\$1.395.454** but with a standard deviation of **\$801.696**, we could segment this data per year and per estate and visualize it. First, let's segment it by year.
+
+```{python}
+sns.boxplot(data=contrata_2013_2022_clean, x='año', y='r_bruta_mens', color='green')
+plt.show()
+```
+
+We observe an increment in the salary in time. Now let's segment it by estate.
+
+```{python}
+sns.boxplot(data=contrata_2013_2022_clean, x='Estamento', y='r_bruta_mens', color='green')
+plt.show()
+```
+
+We observe that the estate with better salary is "Directivo" and that the "Profesional" show a greater variation.
