@@ -28,6 +28,8 @@ sns.displot(data=contrata_2013_2022_clean, x='r_bruta_mens', hue='año', kind='k
 plt.show()
 ```
 
+We can see that the salary data is around \$1 million chilean pesos.
+
 We can obtain some metrics about the data using the following.
 
 ```{python}
@@ -35,6 +37,22 @@ contrata_2013_2022_clean['r_bruta_mens'].describe()
 ```
 
 The mean of the salary data between 2013 and 2022 is around **\$1.395.454** but with a standard deviation of **\$801.696**, we could segment this data per year and per estate and visualize it. First, let's segment it by year.
+
+Another relevant issue is that in some cases the salary is equal to zero, let's look that.
+
+```{python}
+# first let's store this data in a new dataframe
+zero_salary = contrata_2013_2022_clean[contrata_2013_2022_clean['r_bruta_mens']==0]
+
+```
+
+With the id of workers in this situation we can visualize if the same worker has zero salary over the years.
+
+```{python}
+salary_zero_salary = contrata_2013_2022_clean[contrata_2013_2022_clean["id"].isin(list(zero_salary["id"]))]
+
+salary_zero_salary
+```
 
 ```{python}
 sns.boxplot(data=contrata_2013_2022_clean, x='año', y='r_bruta_mens', color='green')
