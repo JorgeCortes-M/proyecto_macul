@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+*html
+.gitignore
+quarto_docs/02_salary_analysis_files
+
