@@ -23,7 +23,11 @@ In a first exploratory analysis we could visualize the salary without discounts 
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-sns.displot(data=contrata_2013_2022_clean, x='r_bruta_mens', hue='año', kind='kde')
+sal_dist = sns.displot(data=contrata_2013_2022_clean, x='r_bruta_mens', hue='año', kind='kde')
+
+sal_dist.set(xlabel = "Renta bruta mensualizada",
+             ylabel = "Densidad",
+             title= "Distribución de renta bruta")
 
 plt.show()
 ```
@@ -44,26 +48,46 @@ Another relevant issue is that in some cases the salary is equal to zero, let's 
 # first let's store this data in a new dataframe
 zero_salary = contrata_2013_2022_clean[contrata_2013_2022_clean['r_bruta_mens']==0]
 
+zero_salary["id"].unique().size
+
 ```
 
-With the id of workers in this situation we can visualize if the same worker has zero salary over the years.
+We know that 41 workers in some month has received \$0, let's see what percentage of workers represents that.
 
 ```{python}
-salary_zero_salary = contrata_2013_2022_clean[contrata_2013_2022_clean["id"].isin(list(zero_salary["id"]))]
+percentage_zero = (zero_salary["id"].unique().size/contrata_2013_2022_clean["id"].unique().size)*100
 
-salary_zero_salary
+percentage_zero
 ```
+
+Those workers represents around the 10% of the total. Now we could try to know in which months this happen more frequently.
+
+```{python}
+month_freq = sns.countplot(data=zero_salary, x="Mes",
+                          order = zero_salary["Mes"].value_counts().index)
+
+```
+
+We can observe that September is the month with most employees with zero salary.
+
+Another question that we could try to answer is how is the distribution of salary among the years. We can visualize it using a boxplot graph.
 
 ```{python}
 sns.boxplot(data=contrata_2013_2022_clean, x='año', y='r_bruta_mens', color='green')
+
+ax.set(xlabel = "Año",
+       ylabel = "R. bruta mensualizada",
+       title = "Distribución de salario en el tiempo")
 plt.show()
 ```
 
 We observe an increment in the salary in time. Now let's segment it by estate.
 
 ```{python}
-sns.boxplot(data=contrata_2013_2022_clean, x='Estamento', y='r_bruta_mens', color='green')
+sns.boxplot(data=contrata_2013_2022_clean, x='Estamento', y='r_bruta_mens', color='red')
 plt.show()
 ```
 
 We observe that the estate with better salary is "Directivo" and that the "Profesional" show a greater variation.
+
+We could try to perform an anova test in order to identify if there is statistical differences in salary between the different staments.
